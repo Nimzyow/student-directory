@@ -1,10 +1,10 @@
 # Lets put all students into a hash for better readability
-
+@students = []
 def interactive_menu
-  students = []
+  students = @students
   loop do
     print_instructions
-    process(gets.chomp, students)
+    process(STDIN.gets.chomp, students)
   end
 end
 
@@ -40,14 +40,26 @@ def save_students(students)
   file.close
 end
 
-def load_students(students)
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, hobby, height = line.chomp.split(",")
-    students << {name: name, hobby: hobby,
+    @students << {name: name, hobby: hobby,
       height: height, cohort: cohort.to_sym}
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first #first argument from the command line
+  return if filename.nil? #get out of method if it isnt given
+  if File.exists?(filename) #if it exists
+    load_students(filename)
+    puts "Loaded #{@students.length} from #{filename}"
+  else #if it doesnt exist
+    puts "Sorry, #{filename} doesn't exist"
+    exit #quit the program
+  end
 end
 
 def print_instructions
@@ -84,10 +96,10 @@ def enter_student_into_database(new_student, students)
 end
 
 def input_students_properties
-  name = gets.chomp
+  name = STDIN.gets.chomp
   if !name.empty?
     puts "Please enter cohort"
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp
     if cohort.empty?
       cohort = "november".to_sym
     end
@@ -101,7 +113,7 @@ end
 
 def input_students_attribute(property)
   puts "Please enter #{property} of the student"
-  return gets.chomp
+  return STDIN.gets.chomp
 end
 
 def print_header
@@ -116,7 +128,7 @@ end
 def print_students_list(students)
   if students.length != 0
     puts "enter cohort. To display all students, simply press Enter"
-    cohort_selection = gets.chomp
+    cohort_selection = STDIN.gets.chomp
     if !cohort_selection.empty?
       students.map.with_index  {|student, index|
       #code exercise to print only specific cohort
@@ -147,4 +159,5 @@ def print_footer(names)
   end
 end
 
+try_load_students
 interactive_menu

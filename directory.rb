@@ -50,14 +50,24 @@ def print_header
 end
 
 def print(students)
-  students.map.with_index  {|student, index|
-    #code exercise to print only names beginning with N
-    if student[:name].length < 12
+  puts "enter cohort to display students. If you want to display all students,
+   simply press Enter"
+  cohort_selection = gets.chomp
+  if !cohort_selection.empty?
+    students.map.with_index  {|student, index|
+    #code exercise to print only specific cohort
+      if student[:cohort] == cohort_selection
+          puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)
+                with a height of #{student[:height]} and hobby of
+                #{student[:hobby]}"
+      end}
+  else
+    students.map.with_index  {|student, index|
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)
-    with a height of #{student[:height]} and hobby of #{student[:hobby]}"
-  end}
-
+    with a height of #{student[:height]} and hobby of #{student[:hobby]}"}
+  end
 end
+
 #Lets print them
 def print_footer(names)
   puts "Overall, we have #{names.count} great students".center(50, "*")

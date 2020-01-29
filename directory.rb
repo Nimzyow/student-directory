@@ -5,8 +5,23 @@ def input_students
   puts "To finish, just hit return twice"
   #create an empty array
   students = []
+  new_student = input_students_properties
+  while !new_student[:name].empty? do
+    #the << is called a shovel operator and it's used to put
+    #things into an array
+
+    students << {name: new_student[:name], hobby: new_student[:hobby],
+      height: new_student[:height], cohort: new_student[:cohort]}
+    puts "Now we have #{students.count} students"
+    #get another name from the user
+    puts "Enter another students name"
+    new_student = input_students_properties
+  end
+  return students
+end
+
+def input_students_properties
   name = gets.chomp
-  #while the name is not empty, repeat this code
   if !name.empty?
     puts "Please enter cohort"
     cohort = gets.chomp
@@ -18,30 +33,10 @@ def input_students
     puts "Please enter height of the student"
     height = gets.chomp
     puts "Please enter country of birth of the student"
+    return {name: name, hobby: hobby, cohort: cohort, height: height}
+  else
+    return {name: ""}
   end
-  while !name.empty? do
-    #the << is called a shovel operator and it's used to put
-    #things into an array
-
-    students << {name: name, hobby: hobby, height: height, cohort: cohort}
-    puts "Now we have #{students.count} students"
-    #get another name from the user
-    puts "Enter another students name"
-    name = gets.chomp
-    if !name.empty?
-      puts "Please enter cohort"
-      cohort = gets.chomp
-      if cohort.empty?
-        cohort = "november".to_sym
-      end
-      puts "Please enter hobby of the student"
-      hobby = gets.chomp
-      puts "Please enter height of the student"
-      height = gets.chomp
-      puts "Please enter country of birth of the student"
-    end
-  end
-  return students
 end
 
 def print_header

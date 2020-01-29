@@ -16,6 +16,8 @@ def process(selection, students)
       show_students(students)
     when "3"
       save_students(students)
+    when "4"
+      load_students(students)
     when "9"
       exit
     else
@@ -38,10 +40,21 @@ def save_students(students)
   file.close
 end
 
+def load_students(students)
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, cohort, hobby, height = line.chomp.split(",")
+    students << {name: name, hobby: hobby,
+      height: height, cohort: cohort.to_sym}
+  end
+  file.close
+end
+
 def print_instructions
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.cvs"
+  puts "4. Load the list from students.cvs"
   puts "9. Exit"
 end
 

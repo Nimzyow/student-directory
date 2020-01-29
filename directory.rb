@@ -25,8 +25,11 @@ end
 
 def print(students)
   students.map.with_index  {|student, index|
+    #code exercise to print only names beginning with N
+    if student[:name][0] === "N"
     puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-  }
+  end}
+
 end
 #Lets print them
 def print_footer(names)

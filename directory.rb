@@ -8,6 +8,11 @@ def input_students
   name = gets.chomp
   #while the name is not empty, repeat this code
   if !name.empty?
+    puts "Please enter cohort"
+    cohort = gets.chomp
+    if cohort.empty?
+      cohort = "november".to_sym
+    end
     puts "Please enter hobby of the student"
     hobby = gets.chomp
     puts "Please enter height of the student"
@@ -18,12 +23,17 @@ def input_students
     #the << is called a shovel operator and it's used to put
     #things into an array
 
-    students << {name: name, hobby: hobby, height: height, cohort: :november}
+    students << {name: name, hobby: hobby, height: height, cohort: cohort}
     puts "Now we have #{students.count} students"
     #get another name from the user
     puts "Enter another students name"
     name = gets.chomp
     if !name.empty?
+      puts "Please enter cohort"
+      cohort = gets.chomp
+      if cohort.empty?
+        cohort = "november".to_sym
+      end
       puts "Please enter hobby of the student"
       hobby = gets.chomp
       puts "Please enter height of the student"
@@ -43,14 +53,14 @@ def print(students)
   students.map.with_index  {|student, index|
     #code exercise to print only names beginning with N
     if student[:name].length < 12
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)
+    with a height of #{student[:height]} and hobby of #{student[:hobby]}"
   end}
 
 end
 #Lets print them
 def print_footer(names)
-  stri = "Overall, we have #{names.count} great students".center(50, "*")
-  puts stri
+  puts "Overall, we have #{names.count} great students".center(50, "*")
 end
 
 students = input_students

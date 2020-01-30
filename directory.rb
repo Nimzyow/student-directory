@@ -8,6 +8,14 @@ def interactive_menu
   end
 end
 
+def print_instructions
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.cvs"
+  puts "4. Load the list from students.cvs"
+  puts "9. Exit"
+end
+
 def process(selection, students)
   case selection
     when "1"
@@ -25,6 +33,28 @@ def process(selection, students)
   end
 end
 
+def try_load_students
+  filename = ARGV.first #first argument from the command line
+  return if filename.nil? #get out of method if it isnt given
+  if File.exists?(filename) #if it exists
+    load_students(filename)
+    puts "Loaded #{@students.length} from #{filename}"
+  else #if it doesnt exist
+    puts "Sorry, #{filename} doesn't exist"
+    exit #quit the program
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+    name, cohort, hobby, height = line.chomp.split(",")
+    @students << {name: name, hobby: hobby,
+      height: height, cohort: cohort.to_sym}
+  end
+  file.close
+end
+
 def save_students(students)
   #open file for writing
   file = File.open("students.csv", "w")
@@ -40,45 +70,19 @@ def save_students(students)
   file.close
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, hobby, height = line.chomp.split(",")
-    @students << {name: name, hobby: hobby,
-      height: height, cohort: cohort.to_sym}
-  end
-  file.close
-end
-
-def try_load_students
-  filename = ARGV.first #first argument from the command line
-  return if filename.nil? #get out of method if it isnt given
-  if File.exists?(filename) #if it exists
-    load_students(filename)
-    puts "Loaded #{@students.length} from #{filename}"
-  else #if it doesnt exist
-    puts "Sorry, #{filename} doesn't exist"
-    exit #quit the program
-  end
-end
-
-def print_instructions
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.cvs"
-  puts "4. Load the list from students.cvs"
-  puts "9. Exit"
-end
-
 def show_students(students)
   print_header
   print_students_list(students)
   print_footer(students)
 end
 
-def input_students(students)
+def input_students_instructions
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
+end
+
+def input_students(students)
+  input_students_instructions
   new_student = input_students_properties
   while !new_student[:name].empty? do
     enter_student_into_database(new_student, students)
@@ -87,12 +91,6 @@ def input_students(students)
     new_student = input_students_properties
   end
   return students
-end
-
-def enter_student_into_database(new_student, students)
-  #the << is called a shovel operator to put things into an array
-  students << {name: new_student[:name], hobby: new_student[:hobby],
-    height: new_student[:height], cohort: new_student[:cohort]}
 end
 
 def input_students_properties
@@ -111,6 +109,16 @@ def input_students_properties
   end
 end
 
+def enter_student_into_database(new_student, students)
+  #the << is called a shovel operator to put things into an array
+  students << {name: new_student[:name], hobby: new_student[:hobby],
+    height: new_student[:height], cohort: new_student[:cohort]}
+end
+
+def count_students(students)
+  puts "Now we have #{students.count} students"
+end
+
 def input_students_attribute(property)
   puts "Please enter #{property} of the student"
   return STDIN.gets.chomp
@@ -119,10 +127,6 @@ end
 def print_header
   puts "the students of Villains Academy"
   puts "--------------"
-end
-
-def count_students(students)
-  puts "Now we have #{students.count} students"
 end
 
 def print_students_list(students)
